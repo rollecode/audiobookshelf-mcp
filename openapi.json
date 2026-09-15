@@ -1,0 +1,4889 @@
+{
+ "openapi": "3.0.2",
+ "info": {
+  "title": "Audiobookshelf API",
+  "version": "1.0.0",
+  "description": "Extracted from Audiobookshelf's Express routers, with descriptions borrowed from the published docs where they exist."
+ },
+ "paths": {
+  "/api/libraries": {
+   "post": {
+    "summary": "Create a new library on server",
+    "tags": [
+     "Libraries"
+    ],
+    "parameters": [],
+    "requestBody": {
+     "description": "The library object to create.",
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object",
+        "required": [
+         "name",
+         "folders"
+        ],
+        "properties": {
+         "name": {
+          "$ref": "#/components/schemas/libraryName"
+         },
+         "folders": {
+          "$ref": "#/components/schemas/libraryFolders"
+         },
+         "displayOrder": {
+          "$ref": "#/components/schemas/libraryDisplayOrder"
+         },
+         "icon": {
+          "$ref": "#/components/schemas/libraryIcon"
+         },
+         "mediaType": {
+          "$ref": "#/components/schemas/libraryMediaType"
+         },
+         "provider": {
+          "$ref": "#/components/schemas/libraryProvider"
+         },
+         "settings": {
+          "$ref": "#/components/schemas/librarySettings"
+         }
+        }
+       }
+      }
+     }
+    }
+   },
+   "get": {
+    "summary": "Get all libraries on server",
+    "tags": [
+     "Libraries"
+    ],
+    "parameters": []
+   }
+  },
+  "/api/libraries/{id}": {
+   "get": {
+    "summary": "Get a single library by ID on server",
+    "tags": [
+     "Libraries"
+    ],
+    "parameters": [
+     {
+      "in": "query",
+      "name": "include",
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "$ref": "#/components/parameters/minified"
+     },
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ]
+   },
+   "patch": {
+    "summary": "Update a single library by ID on server",
+    "tags": [
+     "Libraries"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "description": "The library object to update.",
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object",
+        "properties": {
+         "name": {
+          "$ref": "#/components/schemas/libraryName"
+         },
+         "folders": {
+          "$ref": "#/components/schemas/libraryFolders"
+         },
+         "displayOrder": {
+          "$ref": "#/components/schemas/libraryDisplayOrder"
+         },
+         "icon": {
+          "$ref": "#/components/schemas/libraryIcon"
+         },
+         "mediaType": {
+          "$ref": "#/components/schemas/libraryMediaType"
+         },
+         "provider": {
+          "$ref": "#/components/schemas/libraryProvider"
+         },
+         "settings": {
+          "$ref": "#/components/schemas/librarySettings"
+         }
+        }
+       }
+      }
+     }
+    }
+   },
+   "delete": {
+    "summary": "Delete a single library by ID on server",
+    "tags": [
+     "Libraries"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/libraries/{id}/items": {
+   "get": {
+    "summary": "Get items in a library",
+    "tags": [
+     "Libraries"
+    ],
+    "parameters": [
+     {
+      "$ref": "#/components/parameters/limit"
+     },
+     {
+      "$ref": "#/components/parameters/page"
+     },
+     {
+      "in": "query",
+      "name": "sort",
+      "description": "The field to sort by from the request.",
+      "example": "numBooks",
+      "schema": {
+       "type": "string",
+       "default": "name"
+      }
+     },
+     {
+      "$ref": "#/components/parameters/desc"
+     },
+     {
+      "in": "query",
+      "name": "filter",
+      "description": "The filter for the library.",
+      "example": "media.metadata.title",
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "in": "query",
+      "name": "include",
+      "description": "The fields to include in the response. The only current option is `rssfeed`.",
+      "allowReserved": true,
+      "example": "rssfeed",
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "$ref": "#/components/parameters/minified"
+     },
+     {
+      "in": "query",
+      "name": "collapseSeries",
+      "description": "Whether to collapse series into a single cover",
+      "schema": {
+       "type": "integer",
+       "default": 0
+      }
+     },
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ]
+   }
+  },
+  "/api/libraries/{id}/issues": {
+   "delete": {
+    "summary": "Delete items with issues in a library.",
+    "tags": [
+     "Libraries"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/libraries/{id}/episode-downloads": {
+   "get": {
+    "summary": "Get libraries episode-downloads.",
+    "tags": [
+     "libraries"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ]
+   }
+  },
+  "/api/libraries/{id}/series": {
+   "get": {
+    "summary": "Get library series",
+    "tags": [
+     "Libraries"
+    ],
+    "parameters": [
+     {
+      "$ref": "#/components/parameters/limit"
+     },
+     {
+      "$ref": "#/components/parameters/page"
+     },
+     {
+      "in": "query",
+      "name": "sort",
+      "description": "The field to sort by from the request.",
+      "example": "numBooks",
+      "schema": {
+       "type": "string",
+       "enum": [
+        "name",
+        "numBooks",
+        "totalDuration",
+        "addedAt",
+        "lastBookAdded",
+        "lastBookUpdated"
+       ],
+       "default": "name"
+      }
+     },
+     {
+      "$ref": "#/components/parameters/desc"
+     },
+     {
+      "in": "query",
+      "name": "filter",
+      "description": "The filter for the library.",
+      "example": "media.metadata.title",
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "in": "query",
+      "name": "include",
+      "description": "The fields to include in the response. The only current option is `rssfeed`.",
+      "allowReserved": true,
+      "example": "rssfeed",
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "$ref": "#/components/parameters/minified"
+     },
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ]
+   }
+  },
+  "/api/libraries/{id}/series/{seriesId}": {
+   "get": {
+    "summary": "Get single series in library",
+    "tags": [
+     "Libraries"
+    ],
+    "parameters": [
+     {
+      "$ref": "#/components/parameters/limit"
+     },
+     {
+      "$ref": "#/components/parameters/page"
+     },
+     {
+      "in": "query",
+      "name": "sort",
+      "description": "The field to sort by from the request.",
+      "example": "numBooks",
+      "schema": {
+       "type": "string",
+       "enum": [
+        "name",
+        "numBooks",
+        "totalDuration",
+        "addedAt",
+        "lastBookAdded",
+        "lastBookUpdated"
+       ],
+       "default": "name"
+      }
+     },
+     {
+      "$ref": "#/components/parameters/desc"
+     },
+     {
+      "in": "query",
+      "name": "filter",
+      "description": "The filter for the library.",
+      "example": "media.metadata.title",
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "$ref": "#/components/parameters/minified"
+     },
+     {
+      "in": "query",
+      "name": "include",
+      "description": "The fields to include in the response. The only current option is `rssfeed`.",
+      "allowReserved": true,
+      "example": "rssfeed",
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "seriesId",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ]
+   }
+  },
+  "/api/libraries/{id}/collections": {
+   "get": {
+    "summary": "Get libraries collections.",
+    "tags": [
+     "libraries"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ]
+   }
+  },
+  "/api/libraries/{id}/playlists": {
+   "get": {
+    "summary": "Get libraries playlists.",
+    "tags": [
+     "libraries"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ]
+   }
+  },
+  "/api/libraries/{id}/personalized": {
+   "get": {
+    "summary": "Get libraries personalized.",
+    "tags": [
+     "libraries"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ]
+   }
+  },
+  "/api/libraries/{id}/filterdata": {
+   "get": {
+    "summary": "Get libraries filterdata.",
+    "tags": [
+     "libraries"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ]
+   }
+  },
+  "/api/libraries/{id}/search": {
+   "get": {
+    "summary": "Get libraries search.",
+    "tags": [
+     "libraries"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ]
+   }
+  },
+  "/api/libraries/{id}/stats": {
+   "get": {
+    "summary": "Get libraries stats.",
+    "tags": [
+     "libraries"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ]
+   }
+  },
+  "/api/libraries/{id}/authors": {
+   "get": {
+    "summary": "Get all authors in a library",
+    "tags": [
+     "Libraries"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ]
+   }
+  },
+  "/api/libraries/{id}/narrators": {
+   "get": {
+    "summary": "Get libraries narrators.",
+    "tags": [
+     "libraries"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ]
+   }
+  },
+  "/api/libraries/{id}/narrators/{narratorId}": {
+   "patch": {
+    "summary": "Update libraries narrators.",
+    "tags": [
+     "libraries"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "narratorId",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   },
+   "delete": {
+    "summary": "Delete libraries narrators.",
+    "tags": [
+     "libraries"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "narratorId",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/libraries/{id}/matchall": {
+   "get": {
+    "summary": "Get libraries matchall.",
+    "tags": [
+     "libraries"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ]
+   }
+  },
+  "/api/libraries/{id}/scan": {
+   "post": {
+    "summary": "Create or act on libraries scan.",
+    "tags": [
+     "libraries"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/libraries/{id}/recent-episodes": {
+   "get": {
+    "summary": "Get libraries recent-episodes.",
+    "tags": [
+     "libraries"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ]
+   }
+  },
+  "/api/libraries/{id}/opml": {
+   "get": {
+    "summary": "Get libraries opml.",
+    "tags": [
+     "libraries"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ]
+   }
+  },
+  "/api/libraries/order": {
+   "post": {
+    "summary": "Create or act on libraries order.",
+    "tags": [
+     "libraries"
+    ],
+    "parameters": [],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/libraries/{id}/remove-metadata": {
+   "post": {
+    "summary": "Create or act on libraries remove-metadata.",
+    "tags": [
+     "libraries"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/libraries/{id}/podcast-titles": {
+   "get": {
+    "summary": "Get libraries podcast-titles.",
+    "tags": [
+     "libraries"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ]
+   }
+  },
+  "/api/libraries/{id}/download": {
+   "get": {
+    "summary": "Get libraries download.",
+    "tags": [
+     "libraries"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ]
+   }
+  },
+  "/api/items/batch/delete": {
+   "post": {
+    "summary": "Create or act on batch delete.",
+    "tags": [
+     "items"
+    ],
+    "parameters": [],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/items/batch/update": {
+   "post": {
+    "summary": "Create or act on batch update.",
+    "tags": [
+     "items"
+    ],
+    "parameters": [],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/items/batch/get": {
+   "post": {
+    "summary": "Create or act on batch get.",
+    "tags": [
+     "items"
+    ],
+    "parameters": [],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/items/batch/quickmatch": {
+   "post": {
+    "summary": "Create or act on batch quickmatch.",
+    "tags": [
+     "items"
+    ],
+    "parameters": [],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/items/batch/scan": {
+   "post": {
+    "summary": "Create or act on batch scan.",
+    "tags": [
+     "items"
+    ],
+    "parameters": [],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/items/{id}": {
+   "get": {
+    "summary": "Get api items.",
+    "tags": [
+     "items"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ]
+   },
+   "delete": {
+    "summary": "Delete api items.",
+    "tags": [
+     "items"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/items/{id}/download": {
+   "get": {
+    "summary": "Get items download.",
+    "tags": [
+     "items"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ]
+   }
+  },
+  "/api/items/{id}/media": {
+   "patch": {
+    "summary": "Update items media.",
+    "tags": [
+     "items"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/items/{id}/cover": {
+   "get": {
+    "summary": "Get items cover.",
+    "tags": [
+     "items"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ]
+   },
+   "post": {
+    "summary": "Create or act on items cover.",
+    "tags": [
+     "items"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   },
+   "patch": {
+    "summary": "Update items cover.",
+    "tags": [
+     "items"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   },
+   "delete": {
+    "summary": "Delete items cover.",
+    "tags": [
+     "items"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/items/{id}/match": {
+   "post": {
+    "summary": "Create or act on items match.",
+    "tags": [
+     "items"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/items/{id}/play": {
+   "post": {
+    "summary": "Create or act on items play.",
+    "tags": [
+     "items"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/items/{id}/play/{episodeId}": {
+   "post": {
+    "summary": "Create or act on items play.",
+    "tags": [
+     "items"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "episodeId",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/items/{id}/tracks": {
+   "patch": {
+    "summary": "Update items tracks.",
+    "tags": [
+     "items"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/items/{id}/scan": {
+   "post": {
+    "summary": "Create or act on items scan.",
+    "tags": [
+     "items"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/items/{id}/metadata-object": {
+   "get": {
+    "summary": "Get items metadata-object.",
+    "tags": [
+     "items"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ]
+   }
+  },
+  "/api/items/{id}/chapters": {
+   "post": {
+    "summary": "Create or act on items chapters.",
+    "tags": [
+     "items"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/items/{id}/ffprobe/{fileid}": {
+   "get": {
+    "summary": "Get items ffprobe.",
+    "tags": [
+     "items"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "fileid",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ]
+   }
+  },
+  "/api/items/{id}/file/{fileid}": {
+   "get": {
+    "summary": "Get items file.",
+    "tags": [
+     "items"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "fileid",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ]
+   },
+   "delete": {
+    "summary": "Delete items file.",
+    "tags": [
+     "items"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "fileid",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/items/{id}/file/{fileid}/download": {
+   "get": {
+    "summary": "Get file download.",
+    "tags": [
+     "items"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "fileid",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ]
+   }
+  },
+  "/api/items/{id}/ebook/{fileid}?": {
+   "get": {
+    "summary": "Get items ebook.",
+    "tags": [
+     "items"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "fileid",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ]
+   }
+  },
+  "/api/items/{id}/ebook/{fileid}/status": {
+   "patch": {
+    "summary": "Update ebook status.",
+    "tags": [
+     "items"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "fileid",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/users": {
+   "post": {
+    "summary": "Create or act on api users.",
+    "tags": [
+     "users"
+    ],
+    "parameters": [],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   },
+   "get": {
+    "summary": "Get api users.",
+    "tags": [
+     "users"
+    ],
+    "parameters": []
+   }
+  },
+  "/api/users/online": {
+   "get": {
+    "summary": "Get users online.",
+    "tags": [
+     "users"
+    ],
+    "parameters": []
+   }
+  },
+  "/api/users/{id}": {
+   "get": {
+    "summary": "Get api users.",
+    "tags": [
+     "users"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ]
+   },
+   "patch": {
+    "summary": "Update api users.",
+    "tags": [
+     "users"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   },
+   "delete": {
+    "summary": "Delete api users.",
+    "tags": [
+     "users"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/users/{id}/openid-unlink": {
+   "patch": {
+    "summary": "Update users openid-unlink.",
+    "tags": [
+     "users"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/users/{id}/listening-sessions": {
+   "get": {
+    "summary": "Get users listening-sessions.",
+    "tags": [
+     "users"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ]
+   }
+  },
+  "/api/users/{id}/listening-stats": {
+   "get": {
+    "summary": "Get users listening-stats.",
+    "tags": [
+     "users"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ]
+   }
+  },
+  "/api/collections": {
+   "post": {
+    "summary": "Create or act on api collections.",
+    "tags": [
+     "collections"
+    ],
+    "parameters": [],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   },
+   "get": {
+    "summary": "Get api collections.",
+    "tags": [
+     "collections"
+    ],
+    "parameters": []
+   }
+  },
+  "/api/collections/{id}": {
+   "get": {
+    "summary": "Get api collections.",
+    "tags": [
+     "collections"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ]
+   },
+   "patch": {
+    "summary": "Update api collections.",
+    "tags": [
+     "collections"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   },
+   "delete": {
+    "summary": "Delete api collections.",
+    "tags": [
+     "collections"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/collections/{id}/book": {
+   "post": {
+    "summary": "Create or act on collections book.",
+    "tags": [
+     "collections"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/collections/{id}/book/{bookId}": {
+   "delete": {
+    "summary": "Delete collections book.",
+    "tags": [
+     "collections"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "bookId",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/collections/{id}/batch/add": {
+   "post": {
+    "summary": "Create or act on batch add.",
+    "tags": [
+     "collections"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/collections/{id}/batch/remove": {
+   "post": {
+    "summary": "Create or act on batch remove.",
+    "tags": [
+     "collections"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/playlists": {
+   "post": {
+    "summary": "Create or act on api playlists.",
+    "tags": [
+     "playlists"
+    ],
+    "parameters": [],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   },
+   "get": {
+    "summary": "Get api playlists.",
+    "tags": [
+     "playlists"
+    ],
+    "parameters": []
+   }
+  },
+  "/api/playlists/{id}": {
+   "get": {
+    "summary": "Get api playlists.",
+    "tags": [
+     "playlists"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ]
+   },
+   "patch": {
+    "summary": "Update api playlists.",
+    "tags": [
+     "playlists"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   },
+   "delete": {
+    "summary": "Delete api playlists.",
+    "tags": [
+     "playlists"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/playlists/{id}/item": {
+   "post": {
+    "summary": "Create or act on playlists item.",
+    "tags": [
+     "playlists"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/playlists/{id}/item/{libraryItemId}/{episodeId}?": {
+   "delete": {
+    "summary": "Delete playlists item.",
+    "tags": [
+     "playlists"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "libraryItemId",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "episodeId",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/playlists/{id}/batch/add": {
+   "post": {
+    "summary": "Create or act on batch add.",
+    "tags": [
+     "playlists"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/playlists/{id}/batch/remove": {
+   "post": {
+    "summary": "Create or act on batch remove.",
+    "tags": [
+     "playlists"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/playlists/collection/{collectionId}": {
+   "post": {
+    "summary": "Create or act on playlists collection.",
+    "tags": [
+     "playlists"
+    ],
+    "parameters": [
+     {
+      "name": "collectionId",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/me": {
+   "get": {
+    "summary": "Get api me.",
+    "tags": [
+     "me"
+    ],
+    "parameters": []
+   }
+  },
+  "/api/me/sessions": {
+   "get": {
+    "summary": "Get me sessions.",
+    "tags": [
+     "me"
+    ],
+    "parameters": []
+   }
+  },
+  "/api/me/sessions/{id}": {
+   "delete": {
+    "summary": "Delete me sessions.",
+    "tags": [
+     "me"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/me/progress": {
+   "get": {
+    "summary": "Get me progress.",
+    "tags": [
+     "me"
+    ],
+    "parameters": []
+   }
+  },
+  "/api/me/bookmarks": {
+   "get": {
+    "summary": "Get me bookmarks.",
+    "tags": [
+     "me"
+    ],
+    "parameters": []
+   }
+  },
+  "/api/me/bookmarks/{libraryItemId}": {
+   "get": {
+    "summary": "Get me bookmarks.",
+    "tags": [
+     "me"
+    ],
+    "parameters": [
+     {
+      "name": "libraryItemId",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ]
+   }
+  },
+  "/api/me/listening-sessions": {
+   "get": {
+    "summary": "Get me listening-sessions.",
+    "tags": [
+     "me"
+    ],
+    "parameters": []
+   }
+  },
+  "/api/me/item/listening-sessions/{libraryItemId}/{episodeId}?": {
+   "get": {
+    "summary": "Get item listening-sessions.",
+    "tags": [
+     "me"
+    ],
+    "parameters": [
+     {
+      "name": "libraryItemId",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "episodeId",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ]
+   }
+  },
+  "/api/me/listening-stats": {
+   "get": {
+    "summary": "Get me listening-stats.",
+    "tags": [
+     "me"
+    ],
+    "parameters": []
+   }
+  },
+  "/api/me/progress/{id}/remove-from-continue-listening": {
+   "get": {
+    "summary": "Get progress remove-from-continue-listening.",
+    "tags": [
+     "me"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ]
+   }
+  },
+  "/api/me/progress/{id}/{episodeId}?": {
+   "get": {
+    "summary": "Get me progress.",
+    "tags": [
+     "me"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "episodeId",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ]
+   }
+  },
+  "/api/me/progress/batch/update": {
+   "patch": {
+    "summary": "Update batch update.",
+    "tags": [
+     "me"
+    ],
+    "parameters": [],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/me/progress/{libraryItemId}/{episodeId}?": {
+   "patch": {
+    "summary": "Update me progress.",
+    "tags": [
+     "me"
+    ],
+    "parameters": [
+     {
+      "name": "libraryItemId",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "episodeId",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/me/progress/{id}": {
+   "delete": {
+    "summary": "Delete me progress.",
+    "tags": [
+     "me"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/me/item/{id}/bookmark": {
+   "post": {
+    "summary": "Create or act on item bookmark.",
+    "tags": [
+     "me"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   },
+   "patch": {
+    "summary": "Update item bookmark.",
+    "tags": [
+     "me"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/me/item/{id}/bookmark/{time}": {
+   "delete": {
+    "summary": "Delete item bookmark.",
+    "tags": [
+     "me"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "time",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/me/password": {
+   "patch": {
+    "summary": "Update me password.",
+    "tags": [
+     "me"
+    ],
+    "parameters": [],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/me/items-in-progress": {
+   "get": {
+    "summary": "Get me items-in-progress.",
+    "tags": [
+     "me"
+    ],
+    "parameters": []
+   }
+  },
+  "/api/me/series/{id}/remove-from-continue-listening": {
+   "get": {
+    "summary": "Get series remove-from-continue-listening.",
+    "tags": [
+     "me"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ]
+   }
+  },
+  "/api/me/series/{id}/readd-to-continue-listening": {
+   "get": {
+    "summary": "Get series readd-to-continue-listening.",
+    "tags": [
+     "me"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ]
+   }
+  },
+  "/api/me/stats/year/{year}": {
+   "get": {
+    "summary": "Get stats year.",
+    "tags": [
+     "me"
+    ],
+    "parameters": [
+     {
+      "name": "year",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ]
+   }
+  },
+  "/api/me/ereader-devices": {
+   "post": {
+    "summary": "Create or act on me ereader-devices.",
+    "tags": [
+     "me"
+    ],
+    "parameters": [],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/backups": {
+   "get": {
+    "summary": "Get api backups.",
+    "tags": [
+     "backups"
+    ],
+    "parameters": []
+   },
+   "post": {
+    "summary": "Create or act on api backups.",
+    "tags": [
+     "backups"
+    ],
+    "parameters": [],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/backups/{id}": {
+   "delete": {
+    "summary": "Delete api backups.",
+    "tags": [
+     "backups"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/backups/{id}/download": {
+   "get": {
+    "summary": "Get backups download.",
+    "tags": [
+     "backups"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ]
+   }
+  },
+  "/api/backups/{id}/apply": {
+   "get": {
+    "summary": "Get backups apply.",
+    "tags": [
+     "backups"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ]
+   }
+  },
+  "/api/backups/upload": {
+   "post": {
+    "summary": "Create or act on backups upload.",
+    "tags": [
+     "backups"
+    ],
+    "parameters": [],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/backups/path": {
+   "patch": {
+    "summary": "Update backups path.",
+    "tags": [
+     "backups"
+    ],
+    "parameters": [],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/filesystem": {
+   "get": {
+    "summary": "Get api filesystem.",
+    "tags": [
+     "filesystem"
+    ],
+    "parameters": []
+   }
+  },
+  "/api/filesystem/pathexists": {
+   "post": {
+    "summary": "Create or act on filesystem pathexists.",
+    "tags": [
+     "filesystem"
+    ],
+    "parameters": [],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/authors/{id}": {
+   "get": {
+    "summary": "Get an author by ID",
+    "tags": [
+     "Authors"
+    ],
+    "parameters": [
+     {
+      "in": "query",
+      "name": "include",
+      "description": "A comma separated list of what to include with the author. The options are `items` and `series`. `series` will only have an effect if `items` is included. For example, the value `items,series` will include both library items and series.",
+      "allowReserved": true,
+      "schema": {
+       "type": "string"
+      },
+      "example": "items,series"
+     },
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ]
+   },
+   "patch": {
+    "summary": "Update an author by ID",
+    "tags": [
+     "Authors"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "description": "The author object to update.",
+     "content": {
+      "application/json": {
+       "schema": {
+        "properties": {
+         "name": {
+          "$ref": "#/components/schemas/authorName"
+         },
+         "description": {
+          "$ref": "#/components/schemas/authorDescription"
+         },
+         "imagePath": {
+          "$ref": "#/components/schemas/authorImagePath"
+         },
+         "asin": {
+          "$ref": "#/components/schemas/authorAsin"
+         }
+        }
+       }
+      }
+     }
+    }
+   },
+   "delete": {
+    "summary": "Delete an author by ID",
+    "tags": [
+     "Authors"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/authors/{id}/match": {
+   "post": {
+    "summary": "Match the author against Audible using quick match",
+    "tags": [
+     "Authors"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "description": "The author object to match against an online provider.",
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object",
+        "properties": {
+         "q": {
+          "$ref": "#/components/schemas/authorSearchName"
+         },
+         "asin": {
+          "$ref": "#/components/schemas/authorAsin"
+         },
+         "region": {
+          "$ref": "#/components/schemas/region"
+         }
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/authors/{id}/image": {
+   "get": {
+    "summary": "Get an author image by author ID",
+    "tags": [
+     "Authors"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ]
+   },
+   "post": {
+    "summary": "Add an author image to the server",
+    "tags": [
+     "Authors"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "description": "The author image to add by URL.",
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/imageUrl"
+       }
+      }
+     }
+    }
+   },
+   "delete": {
+    "summary": "Delete an author image by author ID",
+    "tags": [
+     "Authors"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/series/{id}": {
+   "get": {
+    "summary": "Get series",
+    "tags": [
+     "Series"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ]
+   },
+   "patch": {
+    "summary": "Update series",
+    "tags": [
+     "Series"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "description": "The series to update.",
+     "content": {
+      "application/json": {
+       "schema": {
+        "properties": {
+         "name": {
+          "$ref": "#/components/schemas/seriesName"
+         },
+         "description": {
+          "$ref": "#/components/schemas/seriesDescription"
+         }
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/sessions": {
+   "get": {
+    "summary": "Get api sessions.",
+    "tags": [
+     "sessions"
+    ],
+    "parameters": []
+   }
+  },
+  "/api/sessions/{id}": {
+   "delete": {
+    "summary": "Delete api sessions.",
+    "tags": [
+     "sessions"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/sessions/open": {
+   "get": {
+    "summary": "Get sessions open.",
+    "tags": [
+     "sessions"
+    ],
+    "parameters": []
+   }
+  },
+  "/api/sessions/batch/delete": {
+   "post": {
+    "summary": "Create or act on batch delete.",
+    "tags": [
+     "sessions"
+    ],
+    "parameters": [],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/session/local": {
+   "post": {
+    "summary": "Create or act on session local.",
+    "tags": [
+     "session"
+    ],
+    "parameters": [],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/session/local-all": {
+   "post": {
+    "summary": "Create or act on session local-all.",
+    "tags": [
+     "session"
+    ],
+    "parameters": [],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/session/{id}": {
+   "get": {
+    "summary": "Get api session.",
+    "tags": [
+     "session"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ]
+   }
+  },
+  "/api/session/{id}/sync": {
+   "post": {
+    "summary": "Create or act on session sync.",
+    "tags": [
+     "session"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/session/{id}/close": {
+   "post": {
+    "summary": "Create or act on session close.",
+    "tags": [
+     "session"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/podcasts": {
+   "post": {
+    "summary": "Create a new podcast",
+    "tags": [
+     "Podcasts"
+    ],
+    "parameters": [],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/Podcast"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/podcasts/feed": {
+   "post": {
+    "summary": "Get podcast feed",
+    "tags": [
+     "Podcasts"
+    ],
+    "parameters": [],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object",
+        "properties": {
+         "rssFeed": {
+          "type": "string",
+          "description": "The RSS feed URL of the podcast"
+         }
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/podcasts/opml/parse": {
+   "post": {
+    "summary": "Get feeds from OPML text",
+    "tags": [
+     "Podcasts"
+    ],
+    "parameters": [],
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object",
+        "properties": {
+         "opmlText": {
+          "type": "string"
+         }
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/podcasts/opml/create": {
+   "post": {
+    "summary": "Bulk create podcasts from OPML feed URLs",
+    "tags": [
+     "Podcasts"
+    ],
+    "parameters": [],
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object",
+        "properties": {
+         "feeds": {
+          "type": "array",
+          "items": {
+           "type": "string"
+          }
+         },
+         "libraryId": {
+          "$ref": "#/components/schemas/libraryId"
+         },
+         "folderId": {
+          "$ref": "#/components/schemas/folderId"
+         },
+         "autoDownloadEpisodes": {
+          "$ref": "#/components/schemas/autoDownloadEpisodes"
+         }
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/podcasts/{id}/checknew": {
+   "get": {
+    "summary": "Check and download new episodes",
+    "tags": [
+     "Podcasts"
+    ],
+    "parameters": [
+     {
+      "name": "limit",
+      "in": "query",
+      "description": "Maximum number of episodes to download",
+      "required": false,
+      "schema": {
+       "type": "integer"
+      }
+     },
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ]
+   }
+  },
+  "/api/podcasts/{id}/downloads": {
+   "get": {
+    "summary": "Get episode downloads",
+    "tags": [
+     "Podcasts"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ]
+   }
+  },
+  "/api/podcasts/{id}/clear-queue": {
+   "get": {
+    "summary": "Clear episode download queue",
+    "tags": [
+     "Podcasts"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ]
+   }
+  },
+  "/api/podcasts/{id}/search-episode": {
+   "get": {
+    "summary": "Find episode by title",
+    "tags": [
+     "Podcasts"
+    ],
+    "parameters": [
+     {
+      "name": "title",
+      "in": "query",
+      "description": "Title of the episode to search for",
+      "required": true,
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ]
+   }
+  },
+  "/api/podcasts/{id}/download-episodes": {
+   "post": {
+    "summary": "Download podcast episodes",
+    "tags": [
+     "Podcasts"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "array",
+        "items": {
+         "type": "string"
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/podcasts/{id}/match-episodes": {
+   "post": {
+    "summary": "Quick match podcast episodes",
+    "tags": [
+     "Podcasts"
+    ],
+    "parameters": [
+     {
+      "name": "override",
+      "in": "query",
+      "description": "Override existing details if set to 1",
+      "required": false,
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/podcasts/{id}/episode/{episodeId}": {
+   "get": {
+    "summary": "Get a specific podcast episode",
+    "tags": [
+     "Podcasts"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "episodeId",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ]
+   },
+   "patch": {
+    "summary": "Update a podcast episode",
+    "tags": [
+     "Podcasts"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "episodeId",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   },
+   "delete": {
+    "summary": "Remove a podcast episode",
+    "tags": [
+     "Podcasts"
+    ],
+    "parameters": [
+     {
+      "name": "hard",
+      "in": "query",
+      "description": "Hard delete the episode if set to 1",
+      "required": false,
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "episodeId",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/notifications": {
+   "get": {
+    "summary": "Get notification settings",
+    "tags": [
+     "Notification"
+    ],
+    "parameters": []
+   },
+   "patch": {
+    "summary": "Update select notification settings",
+    "tags": [
+     "Notification"
+    ],
+    "parameters": [],
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object",
+        "properties": {
+         "appriseApiUrl": {
+          "$ref": "#/components/schemas/appriseApiUrl"
+         },
+         "maxFailedAttempts": {
+          "$ref": "#/components/schemas/maxFailedAttempts"
+         },
+         "maxNotificationQueue": {
+          "$ref": "#/components/schemas/maxNotificationQueue"
+         }
+        }
+       }
+      }
+     }
+    }
+   },
+   "post": {
+    "summary": "Create notification settings",
+    "tags": [
+     "Notification"
+    ],
+    "parameters": [],
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object",
+        "properties": {
+         "libraryId": {
+          "$ref": "#/components/schemas/libraryIdNullable"
+         },
+         "eventName": {
+          "$ref": "#/components/schemas/notificationEventName"
+         },
+         "urls": {
+          "$ref": "#/components/schemas/urls"
+         },
+         "titleTemplate": {
+          "$ref": "#/components/schemas/titleTemplate"
+         },
+         "bodyTemplate": {
+          "$ref": "#/components/schemas/bodyTemplate"
+         },
+         "enabled": {
+          "$ref": "#/components/schemas/enabled"
+         },
+         "type": {
+          "$ref": "#/components/schemas/notificationType"
+         }
+        },
+        "required": [
+         "eventName",
+         "urls",
+         "titleTemplate",
+         "bodyTemplate"
+        ]
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/notificationdata": {
+   "get": {
+    "summary": "Get notification event data",
+    "tags": [
+     "Notification"
+    ],
+    "parameters": []
+   }
+  },
+  "/api/notifications/test": {
+   "get": {
+    "summary": "Send general test notification",
+    "tags": [
+     "Notification"
+    ],
+    "parameters": [
+     {
+      "in": "query",
+      "name": "fail",
+      "description": "Whether to intentionally cause the notification to fail. `0` for false, `1` for true.",
+      "schema": {
+       "type": "integer"
+      }
+     }
+    ]
+   }
+  },
+  "/api/notifications/{id}": {
+   "delete": {
+    "summary": "Delete a notification",
+    "tags": [
+     "Notification"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   },
+   "patch": {
+    "summary": "Update a notification",
+    "tags": [
+     "Notification"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object",
+        "properties": {
+         "libraryId": {
+          "$ref": "#/components/schemas/libraryId"
+         },
+         "eventName": {
+          "$ref": "#/components/schemas/notificationEventName"
+         },
+         "urls": {
+          "$ref": "#/components/schemas/urls"
+         },
+         "titleTemplate": {
+          "$ref": "#/components/schemas/titleTemplate"
+         },
+         "bodyTemplate": {
+          "$ref": "#/components/schemas/bodyTemplate"
+         },
+         "enabled": {
+          "$ref": "#/components/schemas/enabled"
+         },
+         "type": {
+          "$ref": "#/components/schemas/notificationType"
+         }
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/notifications/{id}/test": {
+   "get": {
+    "summary": "Send a test notification",
+    "tags": [
+     "Notification"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ]
+   }
+  },
+  "/api/emails/settings": {
+   "get": {
+    "summary": "Get email settings",
+    "tags": [
+     "Email"
+    ],
+    "parameters": []
+   },
+   "patch": {
+    "summary": "Update email settings",
+    "tags": [
+     "Email"
+    ],
+    "parameters": [],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/EmailSettings"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/emails/test": {
+   "post": {
+    "summary": "Send test email",
+    "tags": [
+     "Email"
+    ],
+    "parameters": [],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/emails/ereader-devices": {
+   "post": {
+    "summary": "Update e-reader devices",
+    "tags": [
+     "Email"
+    ],
+    "parameters": [],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object",
+        "properties": {
+         "ereaderDevices": {
+          "type": "array",
+          "items": {
+           "$ref": "#/components/schemas/EreaderDeviceObject"
+          }
+         }
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/emails/send-ebook-to-device": {
+   "post": {
+    "summary": "Send ebook to device",
+    "tags": [
+     "Email"
+    ],
+    "parameters": [],
+    "requestBody": {
+     "required": true,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object",
+        "properties": {
+         "libraryItemId": {
+          "$ref": "#/components/schemas/libraryItemId"
+         },
+         "deviceName": {
+          "$ref": "#/components/schemas/ereaderName"
+         }
+        }
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/search/covers": {
+   "get": {
+    "summary": "Get search covers.",
+    "tags": [
+     "search"
+    ],
+    "parameters": []
+   }
+  },
+  "/api/search/books": {
+   "get": {
+    "summary": "Get search books.",
+    "tags": [
+     "search"
+    ],
+    "parameters": []
+   }
+  },
+  "/api/search/podcast": {
+   "get": {
+    "summary": "Get search podcast.",
+    "tags": [
+     "search"
+    ],
+    "parameters": []
+   }
+  },
+  "/api/search/authors": {
+   "get": {
+    "summary": "Get search authors.",
+    "tags": [
+     "search"
+    ],
+    "parameters": []
+   }
+  },
+  "/api/search/chapters": {
+   "get": {
+    "summary": "Get search chapters.",
+    "tags": [
+     "search"
+    ],
+    "parameters": []
+   }
+  },
+  "/api/search/providers": {
+   "get": {
+    "summary": "Get search providers.",
+    "tags": [
+     "search"
+    ],
+    "parameters": []
+   }
+  },
+  "/api/cache/purge": {
+   "post": {
+    "summary": "Create or act on cache purge.",
+    "tags": [
+     "cache"
+    ],
+    "parameters": [],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/cache/items/purge": {
+   "post": {
+    "summary": "Create or act on items purge.",
+    "tags": [
+     "cache"
+    ],
+    "parameters": [],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/tools/item/{id}/encode-m4b": {
+   "post": {
+    "summary": "Create or act on item encode-m4b.",
+    "tags": [
+     "tools"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   },
+   "delete": {
+    "summary": "Delete item encode-m4b.",
+    "tags": [
+     "tools"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/tools/item/{id}/embed-metadata": {
+   "post": {
+    "summary": "Create or act on item embed-metadata.",
+    "tags": [
+     "tools"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/tools/batch/embed-metadata": {
+   "post": {
+    "summary": "Create or act on batch embed-metadata.",
+    "tags": [
+     "tools"
+    ],
+    "parameters": [],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/feeds": {
+   "get": {
+    "summary": "Get api feeds.",
+    "tags": [
+     "feeds"
+    ],
+    "parameters": []
+   }
+  },
+  "/api/feeds/item/{itemId}/open": {
+   "post": {
+    "summary": "Create or act on item open.",
+    "tags": [
+     "feeds"
+    ],
+    "parameters": [
+     {
+      "name": "itemId",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/feeds/collection/{collectionId}/open": {
+   "post": {
+    "summary": "Create or act on collection open.",
+    "tags": [
+     "feeds"
+    ],
+    "parameters": [
+     {
+      "name": "collectionId",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/feeds/series/{seriesId}/open": {
+   "post": {
+    "summary": "Create or act on series open.",
+    "tags": [
+     "feeds"
+    ],
+    "parameters": [
+     {
+      "name": "seriesId",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/feeds/{id}/close": {
+   "post": {
+    "summary": "Create or act on feeds close.",
+    "tags": [
+     "feeds"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/custom-metadata-providers": {
+   "get": {
+    "summary": "Get api custom-metadata-providers.",
+    "tags": [
+     "custom-metadata-providers"
+    ],
+    "parameters": []
+   },
+   "post": {
+    "summary": "Create or act on api custom-metadata-providers.",
+    "tags": [
+     "custom-metadata-providers"
+    ],
+    "parameters": [],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/custom-metadata-providers/{id}": {
+   "delete": {
+    "summary": "Delete api custom-metadata-providers.",
+    "tags": [
+     "custom-metadata-providers"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/share/mediaitem": {
+   "post": {
+    "summary": "Create or act on share mediaitem.",
+    "tags": [
+     "share"
+    ],
+    "parameters": [],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/share/mediaitem/{id}": {
+   "delete": {
+    "summary": "Delete share mediaitem.",
+    "tags": [
+     "share"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/stats/year/{year}": {
+   "get": {
+    "summary": "Get stats year.",
+    "tags": [
+     "stats"
+    ],
+    "parameters": [
+     {
+      "name": "year",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ]
+   }
+  },
+  "/api/stats/server": {
+   "get": {
+    "summary": "Get stats server.",
+    "tags": [
+     "stats"
+    ],
+    "parameters": []
+   }
+  },
+  "/api/api-keys": {
+   "get": {
+    "summary": "Get api api-keys.",
+    "tags": [
+     "api-keys"
+    ],
+    "parameters": []
+   },
+   "post": {
+    "summary": "Create or act on api api-keys.",
+    "tags": [
+     "api-keys"
+    ],
+    "parameters": [],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/api-keys/{id}": {
+   "patch": {
+    "summary": "Update api api-keys.",
+    "tags": [
+     "api-keys"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   },
+   "delete": {
+    "summary": "Delete api api-keys.",
+    "tags": [
+     "api-keys"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/upload": {
+   "post": {
+    "summary": "Create or act on api upload.",
+    "tags": [
+     "upload"
+    ],
+    "parameters": [],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/tasks": {
+   "get": {
+    "summary": "Get api tasks.",
+    "tags": [
+     "tasks"
+    ],
+    "parameters": []
+   }
+  },
+  "/api/settings": {
+   "patch": {
+    "summary": "Update api settings.",
+    "tags": [
+     "settings"
+    ],
+    "parameters": [],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/sorting-prefixes": {
+   "patch": {
+    "summary": "Update api sorting-prefixes.",
+    "tags": [
+     "sorting-prefixes"
+    ],
+    "parameters": [],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/authorize": {
+   "post": {
+    "summary": "Create or act on api authorize.",
+    "tags": [
+     "authorize"
+    ],
+    "parameters": [],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/tags": {
+   "get": {
+    "summary": "Get api tags.",
+    "tags": [
+     "tags"
+    ],
+    "parameters": []
+   }
+  },
+  "/api/tags/rename": {
+   "post": {
+    "summary": "Create or act on tags rename.",
+    "tags": [
+     "tags"
+    ],
+    "parameters": [],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/tags/{tag}": {
+   "delete": {
+    "summary": "Delete api tags.",
+    "tags": [
+     "tags"
+    ],
+    "parameters": [
+     {
+      "name": "tag",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/genres": {
+   "get": {
+    "summary": "Get api genres.",
+    "tags": [
+     "genres"
+    ],
+    "parameters": []
+   }
+  },
+  "/api/genres/rename": {
+   "post": {
+    "summary": "Create or act on genres rename.",
+    "tags": [
+     "genres"
+    ],
+    "parameters": [],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/genres/{genre}": {
+   "delete": {
+    "summary": "Delete api genres.",
+    "tags": [
+     "genres"
+    ],
+    "parameters": [
+     {
+      "name": "genre",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/validate-cron": {
+   "post": {
+    "summary": "Create or act on api validate-cron.",
+    "tags": [
+     "validate-cron"
+    ],
+    "parameters": [],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/auth-settings": {
+   "get": {
+    "summary": "Get api auth-settings.",
+    "tags": [
+     "auth-settings"
+    ],
+    "parameters": []
+   },
+   "patch": {
+    "summary": "Update api auth-settings.",
+    "tags": [
+     "auth-settings"
+    ],
+    "parameters": [],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/watcher/update": {
+   "post": {
+    "summary": "Create or act on watcher update.",
+    "tags": [
+     "watcher"
+    ],
+    "parameters": [],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/api/logger-data": {
+   "get": {
+    "summary": "Get api logger-data.",
+    "tags": [
+     "logger-data"
+    ],
+    "parameters": []
+   }
+  },
+  "/hls/{stream}/{file}": {
+   "get": {
+    "summary": "Get hls.",
+    "tags": [
+     ":stream"
+    ],
+    "parameters": [
+     {
+      "name": "stream",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "file",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ]
+   }
+  },
+  "/public/share/{slug}": {
+   "get": {
+    "summary": "Get public share.",
+    "tags": [
+     "share"
+    ],
+    "parameters": [
+     {
+      "name": "slug",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ]
+   }
+  },
+  "/public/share/{slug}/track/{index}": {
+   "get": {
+    "summary": "Get share track.",
+    "tags": [
+     "share"
+    ],
+    "parameters": [
+     {
+      "name": "slug",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "index",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ]
+   }
+  },
+  "/public/share/{slug}/cover": {
+   "get": {
+    "summary": "Get share cover.",
+    "tags": [
+     "share"
+    ],
+    "parameters": [
+     {
+      "name": "slug",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ]
+   }
+  },
+  "/public/share/{slug}/download": {
+   "get": {
+    "summary": "Get share download.",
+    "tags": [
+     "share"
+    ],
+    "parameters": [
+     {
+      "name": "slug",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ]
+   }
+  },
+  "/public/share/{slug}/progress": {
+   "patch": {
+    "summary": "Update share progress.",
+    "tags": [
+     "share"
+    ],
+    "parameters": [
+     {
+      "name": "slug",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "required": false,
+     "content": {
+      "application/json": {
+       "schema": {
+        "type": "object"
+       }
+      }
+     }
+    }
+   }
+  },
+  "/public/session/{id}/track/{index}": {
+   "get": {
+    "summary": "Get session track.",
+    "tags": [
+     "session"
+    ],
+    "parameters": [
+     {
+      "name": "id",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     },
+     {
+      "name": "index",
+      "in": "path",
+      "required": true,
+      "description": "Path parameter.",
+      "schema": {
+       "type": "string"
+      }
+     }
+    ]
+   }
+  }
+ }
+}
