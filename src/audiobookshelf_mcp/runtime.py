@@ -17,7 +17,7 @@ TITLE = "Audiobookshelf"
 ENV_URL = "AUDIOBOOKSHELF_URL"
 ENV_KEY = "AUDIOBOOKSHELF_TOKEN"
 DEFAULT_URL = "http://127.0.0.1:13378"
-DEFAULT_PORT = 8447
+DEFAULT_PORT = 8570
 
 try:
     __version__ = importlib.metadata.version(f"{APP}-mcp")
@@ -87,7 +87,9 @@ def _client() -> httpx.Client:
         _http = httpx.Client(
             base_url=(os.getenv(ENV_URL) or DEFAULT_URL).rstrip("/"),
             headers={"Authorization": f"Bearer {api_key}"},
-            timeout=60.0,
+            # A full library listing over a remote proxy genuinely
+            # takes minutes; 60s times out on a few hundred items.
+            timeout=httpx.Timeout(300.0, connect=15.0),
         )
     return _http
 
