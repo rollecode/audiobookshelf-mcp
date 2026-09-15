@@ -3,3 +3,7 @@
 __pycache__/
 *.egg-info/
 uv.lock
+node_modules/
+audiobookshelf-mcp.service
+audiobookshelf-mcp-auth.service
+audiobookshelf-mcp.conf
