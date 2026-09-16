@@ -97,7 +97,7 @@ def test_the_bearer_token_is_sent():
 def test_every_tool_registers():
     import asyncio
 
-    from audiobookshelf_mcp import tools  # noqa: F401 -- registers the tools
+    from audiobookshelf_mcp import extras, tools  # noqa: F401 -- registers the tools
 
     registered = asyncio.run(runtime.mcp.list_tools())
-    assert len(registered) == 209
+    assert len(registered) == 211

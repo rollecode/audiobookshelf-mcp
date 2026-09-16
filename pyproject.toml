@@ -38,5 +38,6 @@ target-version = "py312"
 # Tools have to hand every failure back as a structured error string; an
 # exception escaping into the stdio stream kills the session.
 "src/audiobookshelf_mcp/runtime.py" = ["BLE001"]
+"src/audiobookshelf_mcp/extras.py" = ["BLE001"]
 # Generated: one function per API operation, long lines and all.
 "src/audiobookshelf_mcp/tools.py" = ["E501"]

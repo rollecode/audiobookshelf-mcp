@@ -164,7 +164,7 @@ def main() -> None:
 
     from dotenv import find_dotenv, load_dotenv
 
-    from . import tools  # noqa: F401 -- importing registers every tool
+    from . import extras, tools  # noqa: F401 -- importing registers every tool
 
     dotenv_path = find_dotenv(usecwd=True)
     if dotenv_path and load_dotenv(dotenv_path, override=False):
