@@ -100,4 +100,4 @@ def test_every_tool_registers():
     from audiobookshelf_mcp import extras, tools  # noqa: F401 -- registers the tools
 
     registered = asyncio.run(runtime.mcp.list_tools())
-    assert len(registered) == 211
+    assert len(registered) == 212
